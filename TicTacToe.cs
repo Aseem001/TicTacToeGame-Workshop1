@@ -32,5 +32,14 @@ namespace TicTacToeGame
                 }
             }
         }
+        public void showBoard(char[] board)
+        {
+            for (int i = 1; i < 8; i += 3)
+            {
+                Console.WriteLine("\t" + board[i] + " | " + board[i + 1] + " | " + board[i + 2]);
+                if (i < 7)
+                    Console.WriteLine("\t--+---+--");
+            }
+        }
     }
 }

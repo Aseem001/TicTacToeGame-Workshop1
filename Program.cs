@@ -9,6 +9,7 @@ namespace TicTacToeGame
             TicTacToe ticTacToe = new TicTacToe();
             char[] board = ticTacToe.createTicTacToeBoard();
             char uservalue = ticTacToe.initializeUserLetter();
+            ticTacToe.showBoard(board);
         }
     }
 }
