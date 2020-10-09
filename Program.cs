@@ -7,7 +7,8 @@ namespace TicTacToeGame
         static void Main(string[] args)
         {
             TicTacToe ticTacToe = new TicTacToe();
-            char[] board = ticTacToe.createTicTacToeBoard();            
+            char[] board = ticTacToe.createTicTacToeBoard();
+            char uservalue = ticTacToe.initializeUserLetter();
         }
     }
 }
