@@ -17,10 +17,10 @@ namespace TicTacToeGame
         }
         public char initializeUserLetter()
         {
+            Console.WriteLine("Enter either X or O whichever you want to play with");
+            char userValue = Convert.ToChar(Console.ReadLine().ToUpper());
             while (true)
-            {
-                Console.WriteLine("Enter either X or O whichever you want to play with");
-                char userValue = Convert.ToChar(Console.ReadLine().ToUpper());
+            {                
                 if (userValue != 'X' && userValue != 'O')
                 {
                     Console.WriteLine("Invalid letter input");
@@ -32,6 +32,15 @@ namespace TicTacToeGame
                 }
             }
         }
+        public char initializeCPULetter(char userValue)
+        {                       
+            char cpuValue = ' ';
+            if (userValue == 'X')
+                cpuValue = 'O';
+            else
+                cpuValue = 'X';
+            return cpuValue;
+        }
         public void showBoard(char[] board)
         {
             for (int i = 1; i < 8; i += 3)
@@ -40,6 +49,13 @@ namespace TicTacToeGame
                 if (i < 7)
                     Console.WriteLine("\t--+---+--");
             }
+        }
+        public void moveToDesiredLocation(char[] board,int index,string user,char letter)
+        {
+            char indexValue = ' ';
+            if (user.Equals("PLAYER") || user.Equals("CPU"))
+                indexValue = letter;
+            board[index] = indexValue;
         }
     }
 }
