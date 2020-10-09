@@ -7,6 +7,7 @@ namespace TicTacToeGame
     class TicTacToe
     {
         public enum Player { USER, CPU };
+        static int counter = 0;
         public char[] createTicTacToeBoard()
         {
             char[] board = new char[10];
@@ -57,6 +58,7 @@ namespace TicTacToeGame
             if (user.Equals("USER") || user.Equals("CPU"))
                 indexValue = letter;
             board[index] = indexValue;
+            counter++;
         }
         public Player toss()
         {
@@ -87,71 +89,137 @@ namespace TicTacToeGame
         public void userMovesFirst(char[] gameBoard)
         {
             char userLetter = initializeUserLetter();
-            char cpuLetter = initializeCPULetter(userLetter);
-            while (true)
-            {                
-                Console.WriteLine("Enter your nex move: (1-9)");
-                int playerPos = Convert.ToInt32(Console.ReadLine());
-                while (true)
+            char cpuLetter = initializeCPULetter(userLetter);            
+            while(true)
+            {
+                while (hasWon(gameBoard) == false && counter < 9)
                 {
-                    if (gameBoard[playerPos] != ' ')
+                    Console.WriteLine("Enter your nex move: (1-9)");
+                    int playerPos = Convert.ToInt32(Console.ReadLine());
+                    while (true)
                     {
-                        Console.WriteLine("Invalid selection!");
-                        playerPos = Convert.ToInt32(Console.ReadLine());
+                        if (gameBoard[playerPos] != ' ')
+                        {
+                            Console.WriteLine("Invalid selection!");
+                            playerPos = Convert.ToInt32(Console.ReadLine());
+                        }
+                        else
+                            break;
                     }
-                    else
+                    moveToDesiredLocation(gameBoard, playerPos, "USER", userLetter);
+                    if (hasWon(gameBoard) == true)
+                    {
+                        Console.WriteLine("Congrats! You won");
                         break;
+                    }
+                    else if (counter == 9)
+                        break;
+                    Random random = new Random();
+                    int cpuPos = random.Next(1, 10);
+                    while (true)
+                    {
+                        if (gameBoard[cpuPos] != ' ')
+                        {
+                            cpuPos = random.Next(1, 10);
+                        }
+                        else
+                            break;
+                    }
+                    moveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);
+                    showBoard(gameBoard);
+                    if (hasWon(gameBoard) == true)
+                    {                        
+                        Console.WriteLine("Sorry! CPU won :(");
+                        break;
+                    }
                 }
-                moveToDesiredLocation(gameBoard, playerPos, "USER", userLetter);
-                Random random = new Random();
-                int cpuPos = random.Next(1, 10);
-                while (true)
+                if (hasWon(gameBoard) == true)
+                    break;
+                else if (counter == 9)
                 {
-                    if (gameBoard[cpuPos] != ' ')
-                    {
-                        cpuPos = random.Next(1, 10);
-                    }
-                    else
-                        break;
-                }
-                moveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);
-                showBoard(gameBoard);
-            }
-            
+                    Console.WriteLine("Sorry, but this was a tie game!");
+                    break;
+                }                
+            }                        
         }
         public void cpuMovesFirst(char[] gameBoard)
         {
             char userLetter = initializeUserLetter();
-            char cpuLetter = initializeCPULetter(userLetter);
-            while (true)
-            {                
-                Random random = new Random();
-                int cpuPos = random.Next(1, 10);
-                while (true)
+            char cpuLetter = initializeCPULetter(userLetter);            
+            while(true)
+            {
+                while (hasWon(gameBoard) == false && counter < 9)
                 {
-                    if (gameBoard[cpuPos] != ' ')
+                    Random random = new Random();
+                    int cpuPos = random.Next(1, 10);
+                    while (true)
                     {
-                        cpuPos = random.Next(1, 10);
+                        if (gameBoard[cpuPos] != ' ')
+                        {
+                            cpuPos = random.Next(1, 10);
+                        }
+                        else
+                            break;
                     }
-                    else
+                    moveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);                    
+                    showBoard(gameBoard);
+                    if (hasWon(gameBoard) == true)
+                    {
+                        Console.WriteLine("Sorry! CPU won :(");
                         break;
+                    }
+                    else if (counter == 9)
+                        break;
+                    Console.WriteLine("Enter your nex move: (1-9)");
+                    int playerPos = Convert.ToInt32(Console.ReadLine());
+                    while (true)
+                    {
+                        if (gameBoard[playerPos] != ' ')
+                        {
+                            Console.WriteLine("Invalid selection!");
+                            playerPos = Convert.ToInt32(Console.ReadLine());
+                        }
+                        else
+                            break;
+                    }
+                    moveToDesiredLocation(gameBoard, playerPos, "USER", userLetter);                    
+                    if (hasWon(gameBoard) == true)
+                    {
+                        showBoard(gameBoard);
+                        Console.WriteLine("Congrats, You won!");
+                        break;
+                    }
                 }
-                moveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);
-                showBoard(gameBoard);
-                Console.WriteLine("Enter your nex move: (1-9)");
-                int playerPos = Convert.ToInt32(Console.ReadLine());
-                while (true)
+                if (hasWon(gameBoard) == true)
+                    break;
+                else if (counter == 9)
                 {
-                    if (gameBoard[playerPos] != ' ')
-                    {
-                        Console.WriteLine("Invalid selection!");
-                        playerPos = Convert.ToInt32(Console.ReadLine());
-                    }
-                    else
-                        break;
-                }
-                moveToDesiredLocation(gameBoard, playerPos, "USER", userLetter);                
+                    Console.WriteLine("Sorry, but this was a tie game!");
+                    break;
+                }                
             }            
+        }
+        public Boolean hasWon(char[] board)
+        {            
+            for (int i = 1; i < 8; i += 3)
+            {
+                if (board[i] == board[i + 1] && board[i + 1] == board[i + 2] && board[i]!=' ')
+                {
+                    return true;
+                }
+            }
+            if (board[1] == board[4] && board[4] == board[7] && board[1] != ' ')
+                return true;
+            if ((board[2] == board[5]) && (board[5] == board[8]) && board[2] != ' ')
+                return true;
+            if (board[3].Equals(board[6]) && board[6].Equals(board[9]) && board[3] != ' ')
+                return true;
+            if ((board[3] == board[5]) && (board[5] == board[7]) && board[3] != ' ')
+                return true;
+            if ((board[1] == board[5]) && (board[5] == board[9]) && board[1] != ' ')
+                return true;
+            else
+                return false;
         }
     }
 }
