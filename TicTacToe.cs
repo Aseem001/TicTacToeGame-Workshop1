@@ -8,6 +8,7 @@ namespace TicTacToeGame
     {
         public enum Player { USER, CPU };
         static int counter = 0;
+        private readonly Random random = new Random();
         public char[] CreateTicTacToeBoard()
         {
             char[] board = new char[10];
@@ -36,7 +37,7 @@ namespace TicTacToeGame
         }
         public char InitializeCPULetter(char userValue)
         {
-            char cpuValue = ' ';
+            char cpuValue;
             if (userValue == 'X')
                 cpuValue = 'O';
             else
@@ -61,8 +62,7 @@ namespace TicTacToeGame
             counter++;
         }
         public Player Toss()
-        {
-            Random random = new Random();
+        {           
             Console.WriteLine("Enter\n1-for Heads\n2-for Tails");
             int userChoice = Convert.ToInt32(Console.ReadLine());
             int tossValue = random.Next(1, 3);
@@ -96,8 +96,7 @@ namespace TicTacToeGame
         {
             char userLetter = InitializeUserLetter();
             char cpuLetter = InitializeCPULetter(userLetter);
-            Random rand = new Random();
-            int cpuFirstPos = rand.Next(1, 10);
+            int cpuFirstPos = GetComputerMove(gameBoard, userLetter, cpuLetter);
             MoveToDesiredLocation(gameBoard, cpuFirstPos, "CPU", cpuLetter);
             ShowBoard(gameBoard);
             PlayLogic(gameBoard, userLetter, cpuLetter);                     
@@ -123,6 +122,7 @@ namespace TicTacToeGame
                     MoveToDesiredLocation(gameBoard, playerPos, "USER", userLetter);
                     if (HasWon(gameBoard) == true)
                     {
+                        ShowBoard(gameBoard);
                         Console.WriteLine("\nCongrats! You won");
                         break;
                     }
@@ -132,8 +132,7 @@ namespace TicTacToeGame
                     if (cpuPos != 0)
                         MoveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);
                     else
-                    {
-                        Random random = new Random();
+                    {                        
                         int cpuPosAlternate = random.Next(1, 10);
                         while (true)
                         {
@@ -192,9 +191,14 @@ namespace TicTacToeGame
             int userWinningMove = GetWinningMove(board, userLetter);
             if (userWinningMove != 0)
                 return userWinningMove;
-            int cornerMove = GetCornerMove(board);
+            int cornerMove = GetRandomCornerMove(board);
             if (cornerMove != 0)
                 return cornerMove;
+            if (board[5] == ' ')
+                return 5;
+            int sideMove = GetRandomSideMove(board);
+            if (sideMove != 0)
+                return sideMove;
             return 0;
         }
         public int GetWinningMove(char[] board,char letter)
@@ -217,14 +221,38 @@ namespace TicTacToeGame
             Array.Copy(board, 0, boardCopy, 0, board.Length);
             return boardCopy;
         }
-        public int GetCornerMove(char[] board)
+        public int GetRandomCornerMove(char[] board)
         {
             int[] cornerMoves = { 1, 3, 7, 9 };
-            for(int index=0;index<4;index++)
+            int randomCornerBlock;
+            while (true)
             {
-                if (board[cornerMoves[index]] == ' ')
-                    return cornerMoves[index];
+                randomCornerBlock = random.Next(0, 4);
+                if (board[cornerMoves[randomCornerBlock]] == ' ')
+                    break;
             }
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == randomCornerBlock)
+                    return cornerMoves[i];
+            }
+            return 0;          
+        }
+        public int GetRandomSideMove(char[] board)
+        {
+            int[] sidesMoves = { 2, 4, 6, 8 };
+            int randomEmptySide;
+            while(true)
+            {                
+                randomEmptySide = random.Next(0, 4);
+                if (board[sidesMoves[randomEmptySide]] == ' ')
+                    break;
+            } 
+            for(int i=0;i<4;i++)
+            {
+                if (i == randomEmptySide)
+                    return sidesMoves[i];
+            }                        
             return 0;
         }
     }
