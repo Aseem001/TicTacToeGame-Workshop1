@@ -6,9 +6,12 @@ namespace TicTacToeGame
 {
     class TicTacToe
     {
+        //Created a enum with specified members
         public enum Player { USER, CPU };
         static int counter = 0;
         private readonly Random random = new Random();
+
+        //Method to create board
         public char[] CreateTicTacToeBoard()
         {
             char[] board = new char[10];
@@ -18,6 +21,8 @@ namespace TicTacToeGame
             }
             return board;
         }
+
+        //Initialize the letter with which user will play
         public char InitializeUserLetter()
         {
             Console.WriteLine("Enter either X or O whichever you want to play with");
@@ -35,6 +40,8 @@ namespace TicTacToeGame
                 }
             }
         }
+
+        //Initialize the letter with which cpu will play
         public char InitializeCPULetter(char userValue)
         {
             char cpuValue;
@@ -101,6 +108,8 @@ namespace TicTacToeGame
             ShowBoard(gameBoard);
             PlayLogic(gameBoard, userLetter, cpuLetter);                     
         }
+
+        //Logic to throw message of win,tie or loss
         public void PlayLogic(char[] gameBoard, char userLetter, char cpuLetter)
         {
             while (true)
@@ -161,6 +170,8 @@ namespace TicTacToeGame
                 }
             }
         }
+
+        //Logic to check if anybody won the game
         public bool HasWon(char[] board)
         {            
             for (int i = 1; i < 8; i += 3)
@@ -183,20 +194,27 @@ namespace TicTacToeGame
             else
                 return false;
         }
+
+        //Computer move logic defined
         public int GetComputerMove(char[] board, char userLetter, char cpuLetter)
         {
-            int winningMove = GetWinningMove(board, cpuLetter);            
+            int winningMove = GetWinningMove(board, cpuLetter); 
+            //If the cpu is winning
             if (winningMove != 0)
                 return winningMove;
             int userWinningMove = GetWinningMove(board, userLetter);
+            //If CPU not winning then block the win position of user
             if (userWinningMove != 0)
-                return userWinningMove;
+                return userWinningMove;           
             int cornerMove = GetRandomCornerMove(board);
+            //If no one is winning, acquire the corner position
             if (cornerMove != 0)
                 return cornerMove;
+            //If corner is not empty,acquire centre
             if (board[5] == ' ')
                 return 5;
             int sideMove = GetRandomSideMove(board);
+            //If even centre is not empty acquire any of the sideblocks
             if (sideMove != 0)
                 return sideMove;
             return 0;
@@ -221,6 +239,8 @@ namespace TicTacToeGame
             Array.Copy(board, 0, boardCopy, 0, board.Length);
             return boardCopy;
         }
+
+        //To get any random corner position
         public int GetRandomCornerMove(char[] board)
         {
             int[] cornerMoves = { 1, 3, 7, 9 };
@@ -238,6 +258,8 @@ namespace TicTacToeGame
             }
             return 0;          
         }
+
+        //To get any random side position
         public int GetRandomSideMove(char[] board)
         {
             int[] sidesMoves = { 2, 4, 6, 8 };

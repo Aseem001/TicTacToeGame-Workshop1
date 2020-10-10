@@ -6,9 +6,16 @@ namespace TicTacToeGame
     {
         static void Main(string[] args)
         {
+            //Create object of the TicTacToe class
             TicTacToe ticTacToe = new TicTacToe();
-            char[] gameBoard = ticTacToe.CreateTicTacToeBoard();                      
+
+            //Created new board
+            char[] gameBoard = ticTacToe.CreateTicTacToeBoard();
+            
+            //Call for Toss
             TicTacToe.Player player = ticTacToe.Toss();
+
+            //Game continue after toss
             if (player == TicTacToe.Player.USER)
             {
                 ticTacToe.UserMovesFirst(gameBoard);
