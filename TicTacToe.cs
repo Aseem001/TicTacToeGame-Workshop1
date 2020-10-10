@@ -124,14 +124,24 @@ namespace TicTacToeGame
             else
                 return false;
         }
-        public int GetWinningMove(char[] board,char cpuLetter)
+        public int GetComputerMove(char[] board, char userLetter, char cpuLetter)
+        {
+            int winningMove = GetWinningMove(board, cpuLetter);
+            int userWinningMove = GetWinningMove(board, userLetter);
+            if (winningMove != 0)
+                return winningMove;
+            if (userWinningMove != 0)
+                return userWinningMove;
+            return 0;
+        }
+        public int GetWinningMove(char[] board,char letter)
         {
             for(int index=1; index< board.Length; index++)
             {
                 char[] copyBoard = GetCopyOfBoard(board);
                 if (copyBoard[index] == ' ')
                 {
-                    copyBoard[index] = cpuLetter;
+                    copyBoard[index] = letter;
                     if (HasWon(copyBoard))
                         return index;
                 }                    
@@ -144,14 +154,6 @@ namespace TicTacToeGame
             Array.Copy(board, 0, boardCopy, 0, board.Length);
             return boardCopy;
         }
-        public int GetComputerMove(char[] board,char cpuLetter)
-        {
-            int winningMove = GetWinningMove(board, cpuLetter);
-            if (winningMove != 0)
-                return winningMove;
-            return 0;
-        }
-
         public void PlayLogic(char[] gameBoard, char userLetter, char cpuLetter)
         {
             while (true)
@@ -178,7 +180,7 @@ namespace TicTacToeGame
                     }
                     else if (counter == 9)
                         break;
-                    int cpuPos = GetComputerMove(gameBoard, cpuLetter);
+                    int cpuPos = GetComputerMove(gameBoard,userLetter, cpuLetter);
                     if (cpuPos != 0)
                         MoveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);
                     else
