@@ -7,15 +7,15 @@ namespace TicTacToeGame
         static void Main(string[] args)
         {
             TicTacToe ticTacToe = new TicTacToe();
-            char[] gameBoard = ticTacToe.createTicTacToeBoard();                      
-            TicTacToe.Player player = ticTacToe.toss();
+            char[] gameBoard = ticTacToe.CreateTicTacToeBoard();                      
+            TicTacToe.Player player = ticTacToe.Toss();
             if (player == TicTacToe.Player.USER)
             {
-                ticTacToe.userMovesFirst(gameBoard);
+                ticTacToe.UserMovesFirst(gameBoard);
             }
             else if (player == TicTacToe.Player.CPU)
             {
-                ticTacToe.cpuMovesFirst(gameBoard);
+                ticTacToe.CpuMovesFirst(gameBoard);
             }
         }
     }
