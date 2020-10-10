@@ -102,65 +102,13 @@ namespace TicTacToeGame
             ShowBoard(gameBoard);
             PlayLogic(gameBoard, userLetter, cpuLetter);                     
         }
-        public bool HasWon(char[] board)
-        {            
-            for (int i = 1; i < 8; i += 3)
-            {
-                if (board[i] == board[i + 1] && board[i + 1] == board[i + 2] && board[i]!=' ')
-                {
-                    return true;
-                }
-            }
-            if (board[1] == board[4] && board[4] == board[7] && board[1] != ' ')
-                return true;
-            if ((board[2] == board[5]) && (board[5] == board[8]) && board[2] != ' ')
-                return true;
-            if (board[3].Equals(board[6]) && board[6].Equals(board[9]) && board[3] != ' ')
-                return true;
-            if ((board[3] == board[5]) && (board[5] == board[7]) && board[3] != ' ')
-                return true;
-            if ((board[1] == board[5]) && (board[5] == board[9]) && board[1] != ' ')
-                return true;
-            else
-                return false;
-        }
-        public int GetComputerMove(char[] board, char userLetter, char cpuLetter)
-        {
-            int winningMove = GetWinningMove(board, cpuLetter);
-            int userWinningMove = GetWinningMove(board, userLetter);
-            if (winningMove != 0)
-                return winningMove;
-            if (userWinningMove != 0)
-                return userWinningMove;
-            return 0;
-        }
-        public int GetWinningMove(char[] board,char letter)
-        {
-            for(int index=1; index< board.Length; index++)
-            {
-                char[] copyBoard = GetCopyOfBoard(board);
-                if (copyBoard[index] == ' ')
-                {
-                    copyBoard[index] = letter;
-                    if (HasWon(copyBoard))
-                        return index;
-                }                    
-            }
-            return 0;
-        }
-        public char[] GetCopyOfBoard(char[] board)
-        {
-            char[] boardCopy = new char[10];
-            Array.Copy(board, 0, boardCopy, 0, board.Length);
-            return boardCopy;
-        }
         public void PlayLogic(char[] gameBoard, char userLetter, char cpuLetter)
         {
             while (true)
             {
                 while (HasWon(gameBoard) == false && counter < 9)
                 {
-                    Console.WriteLine("Enter your nex move: (1-9)");
+                    Console.WriteLine("Enter your next move: (1-9)");
                     int playerPos = Convert.ToInt32(Console.ReadLine());
                     while (true)
                     {
@@ -175,12 +123,12 @@ namespace TicTacToeGame
                     MoveToDesiredLocation(gameBoard, playerPos, "USER", userLetter);
                     if (HasWon(gameBoard) == true)
                     {
-                        Console.WriteLine("Congrats! You won");
+                        Console.WriteLine("\nCongrats! You won");
                         break;
                     }
                     else if (counter == 9)
                         break;
-                    int cpuPos = GetComputerMove(gameBoard,userLetter, cpuLetter);
+                    int cpuPos = GetComputerMove(gameBoard, userLetter, cpuLetter);
                     if (cpuPos != 0)
                         MoveToDesiredLocation(gameBoard, cpuPos, "CPU", cpuLetter);
                     else
@@ -209,10 +157,75 @@ namespace TicTacToeGame
                     break;
                 else if (counter == 9)
                 {
-                    Console.WriteLine("Sorry, but this was a tie game!");
+                    Console.WriteLine("\nSorry, but this was a tie game!");
                     break;
                 }
             }
+        }
+        public bool HasWon(char[] board)
+        {            
+            for (int i = 1; i < 8; i += 3)
+            {
+                if (board[i] == board[i + 1] && board[i + 1] == board[i + 2] && board[i]!=' ')
+                {
+                    return true;
+                }
+            }
+            if (board[1] == board[4] && board[4] == board[7] && board[1] != ' ')
+                return true;
+            if ((board[2] == board[5]) && (board[5] == board[8]) && board[2] != ' ')
+                return true;
+            if (board[3].Equals(board[6]) && board[6].Equals(board[9]) && board[3] != ' ')
+                return true;
+            if ((board[3] == board[5]) && (board[5] == board[7]) && board[3] != ' ')
+                return true;
+            if ((board[1] == board[5]) && (board[5] == board[9]) && board[1] != ' ')
+                return true;
+            else
+                return false;
+        }
+        public int GetComputerMove(char[] board, char userLetter, char cpuLetter)
+        {
+            int winningMove = GetWinningMove(board, cpuLetter);            
+            if (winningMove != 0)
+                return winningMove;
+            int userWinningMove = GetWinningMove(board, userLetter);
+            if (userWinningMove != 0)
+                return userWinningMove;
+            int cornerMove = GetCornerMove(board);
+            if (cornerMove != 0)
+                return cornerMove;
+            return 0;
+        }
+        public int GetWinningMove(char[] board,char letter)
+        {
+            for(int index=1; index< board.Length; index++)
+            {
+                char[] copyBoard = GetCopyOfBoard(board);
+                if (copyBoard[index] == ' ')
+                {
+                    copyBoard[index] = letter;
+                    if (HasWon(copyBoard))
+                        return index;
+                }                    
+            }
+            return 0;
+        }
+        public char[] GetCopyOfBoard(char[] board)
+        {
+            char[] boardCopy = new char[10];
+            Array.Copy(board, 0, boardCopy, 0, board.Length);
+            return boardCopy;
+        }
+        public int GetCornerMove(char[] board)
+        {
+            int[] cornerMoves = { 1, 3, 7, 9 };
+            for(int index=0;index<4;index++)
+            {
+                if (board[cornerMoves[index]] == ' ')
+                    return cornerMoves[index];
+            }
+            return 0;
         }
     }
 }
