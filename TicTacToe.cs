@@ -8,7 +8,7 @@ namespace TicTacToeGame
     {
         //Created a enum with specified members
         public enum Player { USER, CPU };
-        static int counter = 0;
+        int counter = 0;
         private readonly Random random = new Random();
 
         //Method to create board
@@ -70,7 +70,7 @@ namespace TicTacToeGame
         }
         public Player Toss()
         {           
-            Console.WriteLine("Enter\n1-for Heads\n2-for Tails");
+            Console.WriteLine("Toss call: Enter\n1-for Heads\n2-for Tails");
             int userChoice = Convert.ToInt32(Console.ReadLine());
             int tossValue = random.Next(1, 3);
             switch (tossValue)
@@ -276,6 +276,18 @@ namespace TicTacToeGame
                     return sidesMoves[i];
             }                        
             return 0;
+        }
+
+        public bool PlayAgain()
+        {
+            Console.WriteLine("Do you want to play again?\nPress Y or N");
+            string playAgainPointer = Console.ReadLine().ToLower();
+            if(playAgainPointer.Equals("y"))
+            {
+                Console.Clear();
+                return true;
+            }
+            return false;
         }
     }
 }
